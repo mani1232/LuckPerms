@@ -83,7 +83,7 @@ public class WebEditorSocketListener extends WebSocketListener {
 
     @Override
     public void onMessage(@NonNull WebSocket webSocket, @NonNull String msg) {
-        this.socket.getPlugin().getBootstrap().getScheduler().executeAsync(() -> {
+        this.socket.getPlugin().getBootstrap().getScheduler().async(() -> {
             this.lock.lock();
             try {
                 if (shouldIgnoreMessages()) {

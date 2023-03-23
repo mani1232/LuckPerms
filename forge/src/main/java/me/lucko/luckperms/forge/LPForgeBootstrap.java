@@ -83,7 +83,7 @@ public final class LPForgeBootstrap implements LuckPermsBootstrap, LoaderBootstr
     /**
      * A scheduler adapter for the platform
      */
-    private final SchedulerAdapter schedulerAdapter;
+    private final ForgeSchedulerAdapter schedulerAdapter;
 
     /**
      * The plugin class path appender
@@ -136,7 +136,7 @@ public final class LPForgeBootstrap implements LuckPermsBootstrap, LoaderBootstr
     }
 
     @Override
-    public SchedulerAdapter getScheduler() {
+    public ForgeSchedulerAdapter getScheduler() {
         return this.schedulerAdapter;
     }
 
