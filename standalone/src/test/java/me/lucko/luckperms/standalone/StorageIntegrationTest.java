@@ -27,7 +27,6 @@ package me.lucko.luckperms.standalone;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-
 import me.lucko.luckperms.common.model.Group;
 import me.lucko.luckperms.common.node.types.Inheritance;
 import me.lucko.luckperms.common.node.types.Permission;
@@ -36,11 +35,9 @@ import me.lucko.luckperms.standalone.app.integration.HealthReporter;
 import me.lucko.luckperms.standalone.utils.TestPluginBootstrap;
 import me.lucko.luckperms.standalone.utils.TestPluginBootstrap.TestPlugin;
 import me.lucko.luckperms.standalone.utils.TestPluginProvider;
-
 import net.luckperms.api.event.cause.CreationCause;
 import net.luckperms.api.model.data.DataType;
 import net.luckperms.api.node.Node;
-
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
