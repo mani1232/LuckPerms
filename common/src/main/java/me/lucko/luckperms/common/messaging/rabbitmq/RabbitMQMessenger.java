@@ -35,14 +35,11 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 import com.rabbitmq.client.Delivery;
-
 import me.lucko.luckperms.common.plugin.LuckPermsPlugin;
 import me.lucko.luckperms.common.plugin.scheduler.SchedulerTask;
-
 import net.luckperms.api.messenger.IncomingMessageConsumer;
 import net.luckperms.api.messenger.Messenger;
 import net.luckperms.api.messenger.message.OutgoingMessage;
-
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.concurrent.TimeUnit;
@@ -159,8 +156,19 @@ public class RabbitMQMessenger implements Messenger {
                 this.plugin.getLogger().info("RabbitMQ pubsub connection re-established");
             }
             return true;
-        } catch (Exception ignored) {
-            return false;
+        } catch (Exception e) {
+            if (firstStartup) {
+                this.plugin.getLogger().warn("Unable to connect to RabbitMQ, waiting for 5 seconds then retrying...", e);
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+                return checkAndReopenConnection(false);
+            } else {
+                this.plugin.getLogger().severe("Unable to connect to RabbitMQ", e);
+                return false;
+            }
         }
     }
 

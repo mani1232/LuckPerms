@@ -26,13 +26,10 @@
 package me.lucko.luckperms.standalone;
 
 import com.google.common.collect.ImmutableMap;
-
 import me.lucko.luckperms.common.messaging.InternalMessagingService;
 import me.lucko.luckperms.standalone.app.integration.HealthReporter;
 import me.lucko.luckperms.standalone.utils.TestPluginProvider;
-
 import net.luckperms.api.event.sync.PreNetworkSyncEvent;
-
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -73,7 +70,10 @@ public class MessagingIntegrationTest {
             assertNotNull(messagingServiceB);
 
             CountDownLatch latch = new CountDownLatch(1);
-            pluginB.app().getApi().getEventBus().subscribe(PreNetworkSyncEvent.class, e -> latch.countDown());
+            pluginB.app().getApi().getEventBus().subscribe(PreNetworkSyncEvent.class, e -> {
+                latch.countDown();
+                e.setCancelled(true);
+            });
 
             // send a message from plugin A to plugin B and wait for the message to be received
             messagingServiceA.pushUpdate();
@@ -82,7 +82,7 @@ public class MessagingIntegrationTest {
     }
 
     @Nested
-    class Sql {
+    class MySql {
 
         @Container
         private final GenericContainer<?> container = new GenericContainer<>(DockerImageName.parse("mysql:8"))
@@ -102,6 +102,63 @@ public class MessagingIntegrationTest {
                     .put("data.address", host + ":" + port)
                     .put("data.database", "minecraft")
                     .put("data.username", "root")
+                    .put("data.password", "passw0rd")
+                    .build();
+
+            testMessaging(config, tempDirA, tempDirB);
+        }
+    }
+
+    @Nested
+    class MariaDb {
+
+        @Container
+        private final GenericContainer<?> container = new GenericContainer<>(DockerImageName.parse("mariadb"))
+                .withEnv("MARIADB_USER", "minecraft")
+                .withEnv("MARIADB_PASSWORD", "passw0rd")
+                .withEnv("MARIADB_ROOT_PASSWORD", "rootpassw0rd")
+                .withEnv("MARIADB_DATABASE", "minecraft")
+                .withExposedPorts(3306);
+
+        @Test
+        public void testMySql(@TempDir Path tempDirA, @TempDir Path tempDirB) throws InterruptedException {
+            assertTrue(this.container.isRunning());
+
+            String host = this.container.getHost();
+            Integer port = this.container.getFirstMappedPort();
+
+            Map<String, String> config = ImmutableMap.<String, String>builder()
+                    .put("storage-method", "mariadb")
+                    .put("data.address", host + ":" + port)
+                    .put("data.database", "minecraft")
+                    .put("data.username", "minecraft")
+                    .put("data.password", "passw0rd")
+                    .build();
+
+            testMessaging(config, tempDirA, tempDirB);
+        }
+    }
+
+    @Nested
+    class Postgres {
+
+        @Container
+        private final GenericContainer<?> container = new GenericContainer<>(DockerImageName.parse("postgres"))
+                .withEnv("POSTGRES_PASSWORD", "passw0rd")
+                .withExposedPorts(5432);
+
+        @Test
+        public void testPostgres(@TempDir Path tempDirA, @TempDir Path tempDirB) throws InterruptedException {
+            assertTrue(this.container.isRunning());
+
+            String host = this.container.getHost();
+            Integer port = this.container.getFirstMappedPort();
+
+            Map<String, String> config = ImmutableMap.<String, String>builder()
+                    .put("storage-method", "postgresql")
+                    .put("data.address", host + ":" + port)
+                    .put("data.database", "postgres")
+                    .put("data.username", "postgres")
                     .put("data.password", "passw0rd")
                     .build();
 

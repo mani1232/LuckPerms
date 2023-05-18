@@ -31,10 +31,8 @@ import me.lucko.luckperms.common.node.types.Permission;
 import me.lucko.luckperms.standalone.app.integration.CommandExecutor;
 import me.lucko.luckperms.standalone.app.integration.HealthReporter;
 import me.lucko.luckperms.standalone.utils.TestPluginProvider;
-
 import net.luckperms.api.model.data.DataType;
 import net.luckperms.api.node.NodeEqualityPredicate;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -42,9 +40,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * A set of 'integration tests' for the standalone LuckPerms app.
