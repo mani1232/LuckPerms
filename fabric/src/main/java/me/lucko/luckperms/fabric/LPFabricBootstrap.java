@@ -73,7 +73,7 @@ public final class LPFabricBootstrap implements LuckPermsBootstrap, DedicatedSer
     /**
      * A scheduler adapter for the platform
      */
-    private final SchedulerAdapter schedulerAdapter;
+    private final FabricSchedulerAdapter schedulerAdapter;
 
     /**
      * The plugin class path appender
@@ -116,7 +116,7 @@ public final class LPFabricBootstrap implements LuckPermsBootstrap, DedicatedSer
     }
 
     @Override
-    public SchedulerAdapter getScheduler() {
+    public FabricSchedulerAdapter getScheduler() {
         return this.schedulerAdapter;
     }
 

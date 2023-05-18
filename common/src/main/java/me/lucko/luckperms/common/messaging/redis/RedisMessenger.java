@@ -66,7 +66,7 @@ public class RedisMessenger implements Messenger {
         }
 
         this.sub = new Subscription();
-        this.plugin.getBootstrap().getScheduler().executeAsync(this.sub);
+        this.plugin.getBootstrap().getScheduler().async(this.sub);
     }
 
     @Override
